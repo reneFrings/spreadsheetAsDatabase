@@ -27,6 +27,14 @@ See index.html line:
    ...
 ```
 
+# Please first share the spreadsheet so that anyone who has the link can open it.
+
+![spreadsheet-share](https://user-images.githubusercontent.com/62351899/142073193-6606a6a6-30cd-4b23-a30a-a754804d7bcd.jpg)
+
+![link-aendern](https://user-images.githubusercontent.com/62351899/142073239-ba39baa8-1b5e-4776-9c37-f87f59c76e43.jpg)
+
+![link-bestaetigen](https://user-images.githubusercontent.com/62351899/142073265-2de2dce2-145c-460e-8580-29705668ab2c.jpg)
+
 # Tested for
 ## Windows 10 Desktop
  * Chrome
