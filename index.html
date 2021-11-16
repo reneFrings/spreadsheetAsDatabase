@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Google Spreadsheet Classes</title>
+        <meta name="description" content="Use a google spreadsheet as database. 3 Classes to make a google sheet API request and select the data from a sheet.">
+        <meta name="robots" content="index,follow,noydir">
+
+    </head>
+    <body>
+        <script src="js/js.js"></script> 
+        <script src="js/hide.js"></script> 
+        <script>
+            /**
+             * Use the classes according to this structure.
+             */
+
+                /** 
+                 * Create a new object of SpreadsheetUrl and pass your google api key. 
+                 */
+                const moviedb_sheet_url = new SpreadsheetUrl(strApiKey);
+
+                /** Pass a sheet ID and sheetname to create and save a google api url in the localstorage. */
+                moviedb_sheet_url.save('1zDkvTWDADmPhse1lefQrHUre8iU473UUHcrneVvo7Lo','movies_series');
+
+                /** If there is an value. */
+                if(moviedb_sheet_url.value !== false){
+
+                    /** 
+                     * Create a new object of SpreadsheetData and pass the api url. 
+                     */
+                    const moviedb_data = new SpreadsheetData(moviedb_sheet_url.value);
+                    
+                    /** Fetch the sheet data and get the results as two different arrays or an error. */
+                    moviedb_data.getData
+                        .then(objGetDataResponse => {
+
+                            /** 
+                             * Create a new object of SpreadsheetDataQueries 
+                             */
+                            const moviedb_queries = new SpreadsheetDataQueries(objGetDataResponse.arrDatasets);
+
+                            /** To filter data: Create an object with filter like this to pass it as parameter. Each key must be a colname from your data. */
+                            let objFilter = {
+                                Genres: ['anta','Action','Thrill'],
+                                Tags: ['Space','Favorite','Top10']
+                            };
+
+                            /** To select data by columns: Create an array with colnames like this to pass it as parameter. Each value must be a colname from your data. */
+                            let arrColumns = ['Title','Genres','Tags'];
+
+                            /** Select data by your filter and columns and save the result. */
+                            let arrSelectedData = moviedb_queries.selectDatasetsBy(objFilter,arrColumns);
+                            console.log('Selected data: ', arrSelectedData);
+
+                            /** Sort the data by a column. */
+                            arrSelectedData = moviedb_queries.sortDatasetsByColumn('Title');
+                            console.log('Sort the data by a column: ', arrSelectedData);
+
+                            /** Show one random dataset from the selected data. */
+                            console.log('Show one random dataset: ', moviedb_queries.getRandomDataset);
+
+                            /** Show colnames from the selected data. */
+                            console.log('Show colnames from the selected data: ', moviedb_queries.getColNames);
+
+                            /** Show all colnames from the data. */
+                            console.log('Show all colnames: ', moviedb_queries.getAllColNames);
+
+                            /** Count cols from the selected data. */
+                            console.log('Count cols from the selected data: ', moviedb_queries.countCols);
+
+                            /** Count rows from the selected data. */
+                            console.log('Count rows from the selected data: ', moviedb_queries.countRows);
+
+                            /** To seperate values from a column: Create an array like this to pass it as parameter. Each column:value must be a colname from your data.*/
+                            const arrColsToSeperate = [
+                                {
+                                column: 'Genres',
+                                seperator: ','
+                                },
+                                {
+                                column: 'Tags',
+                                seperator: ','
+                                }
+                            ];
+
+                            /** Get the seperated values for each column as an object and save the result. Based on your current data? */
+                            let objSeperateValues = moviedb_queries.seperateValuesFromColumns(arrColsToSeperate);
+                            console.log('Get the seperated values: ', objSeperateValues);                
+
+                        });
+                }
+                else{
+                    throw new Error(`There is no api url! Please use SpreadsheetUrl and save a sheet id first.`);
+                }
+
+        </script>
+    </body>
+</html>
