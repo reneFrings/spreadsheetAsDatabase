@@ -19,7 +19,7 @@ let objFilter = {
 ![log](https://user-images.githubusercontent.com/62351899/141842207-3ff533bf-06e1-4841-b0e7-b29abdde3096.jpg)
 
 # Usage
-Look at js/js.js file line 665
+See index.html line:
 ```
   /**
    * Use the classes according to this structure.
