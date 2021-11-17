@@ -11,6 +11,8 @@ let objFilter = {
  Genres: ['anta','Action','Thrill'],
  Tags: ['Space','Favorite','Top10']
 };
+
+let arrColumns = ['Title','Genres','Tags'];
 ...               
 ```
 
