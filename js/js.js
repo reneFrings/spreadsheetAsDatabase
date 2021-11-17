@@ -54,16 +54,28 @@
         - strSheetName
      */
         save(strSpreadsheetId,strSheetName){
-            /** If spreadsheet ID seems long enough. */
-            if(strSpreadsheetId.length > 5 ){
-                /** Create and save the API URL. */
-                let strGoogleSheetApiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${strSpreadsheetId}/values/${strSheetName}?alt=json&key=${this.#_strApiKey}`;
-                /** Add the API URL to localstorage. */
-                localStorage.setItem(this.#_strLsKey,strGoogleSheetApiUrl);
+
+            try{
+                /** If strSpreadsheetId is empty */
+                if(strSpreadsheetId.length === '' ) throw `Please add a valid spreadsheet ID as parameter! Your spreadsheet ID is empty: ${strSpreadsheetId}!`;
+                /** If strSpreadsheetId consists only multiple whitespaces */
+                if(strSpreadsheetId.match(/\S/i) === null) throw 'Please add a valid spreadsheet ID as parameter! This one consists only whitespaces.';
+                /** If strSpreadsheetId is to short */
+                if(strSpreadsheetId.length < 5 ) throw `No valid spreadsheet ID: ${strSpreadsheetId}!`;
+                /** If strSheetName is empty */
+                if(strSheetName.length === '' ) throw `Please add a valid sheetname as parameter! Your sheetname is empty: ${strSheetName}!`;
+                /** If strSheetName consists only multiple whitespaces */
+                if(strSheetName.match(/\S/i) === null) throw 'Please add a valid sheetname as parameter! This one consists only whitespaces.';
             }
-            else{
-                throw new Error(`Fehler: Keine gültige Spreadsheet ID: ${strSpreadsheetId}`);
+            catch(err){
+                throw new Error(`SpreadsheetUrl.save(strSpreadsheetId,strSheetName): ${err}`);
             }
+
+            /** Create and save the API URL. */
+            let strGoogleSheetApiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${strSpreadsheetId}/values/${strSheetName}?alt=json&key=${this.#_strApiKey}`;
+
+            /** Add the API URL to localstorage. */
+            localStorage.setItem(this.#_strLsKey,strGoogleSheetApiUrl);
         }
 
     /**
@@ -95,7 +107,7 @@
  * do: Fetch the sheet data about the google sheet API url and returns the results as two different arrays (arrApiResultSheetData and arrDatasets) or an error.
  ***
  * Properties:
-   - Parameter(strGoogleSheetApiUrl), the Google API Spreadsheet URL.
+   - Parameter(strGoogleSheetApiUrl), the Google API Spreadsheet URL: https://sheets.googleapis.com/v4/spreadsheets/SHEETID/values/SHEET_NAME?alt=json&key=API_KEY
    - get getData: 
         - getData.arrApiResultSheetData = Original Array with all datasets. Each row is an array. Cell values of a row are the elements. [[cellValue1,cellValue2,cellValue3],[cellValue1,cellValue2,cellValue3]]
         - getData.arrDatasets = Transformed array with all datasets. Each row is an object like [{colName1:cellValue1,colName2:cellValue2...},{colName1:cellValue1,colName2:cellValue2...}]
@@ -111,11 +123,11 @@
             /** Check API URL. */
             try{
                 /** If no valid API URL. */
-                if(!strGoogleSheetApiUrl.match(/https:\/\/sheets.googleapis.com\/v4\/spreadsheets\/[^\/]*\/values\/[^\/]*\\?alt=json.*/i)) throw 'So müsste sie aussehen: https://sheets.googleapis.com/v4/spreadsheets/SHEETID/values/SHEET_NAME?alt=json&key=API_KEY'
+                if(!strGoogleSheetApiUrl.match(/https:\/\/sheets.googleapis.com\/v4\/spreadsheets\/[^\/]*\/values\/[^\/]*\\?alt=json.*/i)) throw 'The api url does not match the pattern!';
             }
             catch(err)
             {
-                throw new Error(`Fehler: API URL enthält ein Fehler! ${err}`);
+                throw new Error(`SpreadsheetData(strGoogleSheetApiUrl) Parameter: ${err}`);
             }
 
             /** Save API URL. */
@@ -231,10 +243,10 @@
                 /** Check Parameter */
                 try{
                     /** If arr is no array. */
-                    if(!Array.isArray(arr)) throw 'Parameter muss ein Array sein!';
+                    if(!Array.isArray(arr)) throw 'Parameter must be an array!';
                 }
                 catch(err){
-                    throw new Error (`Fehler #_createTableHeadingsObjectString(arr): ${err}. Parameter ist: ${typeof arr}`);
+                    throw new Error (`SpreadsheetData.#_createTableHeadingsObjectString(arr): ${err}. Parameter type is: ${typeof arr}.`);
                 }
 
                 /** Create empty object. */
